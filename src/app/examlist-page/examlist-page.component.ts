@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import { fadeInAnimation } from '../Fade';
+import {Examslist,Exams, Exam} from '../examslist'
+import {DataService} from '../data.service'
 
 interface set{
   setname:string,
@@ -14,8 +16,11 @@ interface set{
 })
 export class ExamlistPageComponent implements OnInit {
   qpidset={
-    set1:"4",
-    set2:"5",
+    set1:"5",
+    set2:"7",
+    set3:"8",
+    set4:"9",
+    set5:"10"
   }
   set1:set;
   set2:set;
@@ -24,17 +29,26 @@ export class ExamlistPageComponent implements OnInit {
   set5:set;
   setarr:Array<set>=[]
   isOpen=true;
-  constructor(private router:Router) { }
+  examslist:Examslist;
+  exams:Array<Exams>=[];
+  exam:Array<Exam>=[];
+  constructor(private router:Router,private dataservice: DataService) { }
 
   ngOnInit() {
     this.generateset();
+    //this.getexamslist();
+  }
+  getexamslist(){
+    this.dataservice.getexamslist().subscribe(data=>{
+      this.examslist=data['examslist'];
+      this.exams=this.examslist.exams;
+    });
   }
   onStartClick(qpid){
-    if(qpid=="4")localStorage.setItem("qpid",qpid);
-    if(qpid=="5")localStorage.setItem("qpid",qpid);
+    localStorage.setItem("qpid",qpid);
     this.toggle();
     setTimeout(resp =>{
-        this.router.navigate(['/start']);
+        this.router.navigate(['/login']);
       },300);
   }
   generateset(){

@@ -29,6 +29,10 @@
     color:#9124a3;
     position: relative;
     top:6px;
+    display: inline;
+}
+#questionDiv h4{
+    display: inline;
 }
 #Time{
     text-align: right;
@@ -55,4 +59,11 @@
 .btn.btn-primary{
     padding-right:20px;
     padding-left:20px;
+}
+#answer_section input:checked + label{
+    color:#3C4858;
+}
+.circle{
+    min-width: 15px;
+    margin-left: 16px;
 }

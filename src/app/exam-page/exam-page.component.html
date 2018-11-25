@@ -18,18 +18,18 @@
                 <button class="btn btn-primary" id='submit' (click)="OnSubmitClick()">Submit Exam</button>
             </div>
         </div>
-        <h4 id="questionDiv"><i class="material-icons">label_important</i>
-             {{showquestion()}}
-        </h4>
+        <div id="questionDiv"><i class="material-icons">label_important</i>
+             <h4 [innerHTML]="showquestion()"></h4>
+        </div>
         <div id="answer_section" class="form-check form-check-radio">
             <div *ngFor="let option of options">
                 <div class="form-check form-check-radio row" [@fadeInAnimation]>
-                    <label class="form-check-label">
+                    <label class="form-check-label row">
                         <input class="form-check-input" type="radio" name="option" id="radio_{{option.oID}}" (click)="OnOptionClick(option.oID)">
-                        {{option.option}}
                         <span class="circle">
                             <span class="check"></span>
                         </span>
+                        <p [innerHTML]="option.option" class="col-md-auto"></p>
                     </label>
                 </div>
             </div>

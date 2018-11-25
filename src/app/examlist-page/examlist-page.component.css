@@ -6,3 +6,12 @@
 .listDiv{
     width: 100%;
 }
+.nav-pills .nav-item .nav-link{
+    background-color: rgba(200,200,200,.2);
+}
+.nav-pills .nav-item .nav-link:hover{
+    background-color: rgba(200,200,200,.5);
+}
+.nav-pills .nav-item .nav-link.active{
+    background-color: #9c27b0;
+}

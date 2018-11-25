@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {fadeInAnimation} from '../Fade'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {fadeInAnimation} from '../Fade';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-result-page',
@@ -7,7 +8,7 @@ import {fadeInAnimation} from '../Fade'
   styleUrls: ['./result-page.component.css'],
   animations:[fadeInAnimation]
 })
-export class ResultPageComponent implements OnInit {
+export class ResultPageComponent implements OnInit ,OnDestroy{
 
   result="";
   total="";
@@ -15,11 +16,14 @@ export class ResultPageComponent implements OnInit {
   icon_color="";
   isOpen=true;
   score_status=""
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit() {
     this.result=localStorage.getItem("result");
     this.total=localStorage.getItem("total");
+    if(this.result==null || this.total==null){
+      this.router.navigate(['/error']);
+    }else{
     //this.result="2";
     //this.total="6";
     if(( parseInt(this.total))/2>(parseInt(this.result))){
@@ -31,7 +35,7 @@ export class ResultPageComponent implements OnInit {
       this.result_icon="check_circle";
       this.score_status="Great Work!";
     }
-    localStorage.clear();
+  }
   }
   toggle(){
     this.isOpen=!this.isOpen;
@@ -40,4 +44,7 @@ export class ResultPageComponent implements OnInit {
     return this.icon_color;
   }
 
+  ngOnDestroy(){
+    localStorage.clear();
+  }
 }

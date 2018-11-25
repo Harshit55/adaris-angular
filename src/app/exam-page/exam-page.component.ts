@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges, AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, AfterViewChecked, OnDestroy} from '@angular/core';
 import { DataService } from '../data.service';
+import {DomSanitizer} from '@angular/platform-browser';
 import { Questions, Maindata, Options } from '../question';
 import { Answerset, Mainresult } from '../result';
 import { Router } from '@angular/router';
@@ -10,6 +11,7 @@ import { fadeInAnimation } from '../Fade';
   styleUrls: ['./exam-page.component.css'],
   animations: [fadeInAnimation]
 })
+
 export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
   quenumber = 0;
   checked = true;
@@ -28,7 +30,7 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   selectedoID = -1;
   selectedqID = -1;
   result: Array<object> = [];
-  duration = 60 * 20;
+  duration = 60 * 30;
   timerdisplay;
   timerprocess;
   isOpen = false;
@@ -38,7 +40,7 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   ngOnInit() {
     this.getreqdata();
     this.showquestion();
-    this.timerdisplay = "20:00";
+    this.timerdisplay = "30:00";
     this.settimer();
   }
   ngOnChanges() {
@@ -127,7 +129,8 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   showquestion() {
     if (this.questions.length > 0) {
-      var displayquestion = this.questions[this.quenumber].question;
+      var displayquestion =this.questions[this.quenumber].question;
+      //var displayquestion ="The sum of five consecutive integers is a and sum of next five consecutive integers is b. Then $${b-a\\over 100}$$ is equal to";
       return displayquestion;
     }
     else {
@@ -175,7 +178,7 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
   getanswerstatus(result) {
     var answerstatus = false;
-    if (result.length > 0) {
+    if (result.length==this.questions.length) {
       result.forEach(element => {
         if (element.oID < 0) {
           answerstatus = true;

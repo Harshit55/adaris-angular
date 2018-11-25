@@ -10,6 +10,8 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { ExamlistPageComponent } from './examlist-page/examlist-page.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import {GoogleSignInComponent} from 'angular-google-signin';
+
 
 @NgModule({
   declarations: [
@@ -19,13 +21,14 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     ResultPageComponent,
     LoginPageComponent,
     ExamlistPageComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    GoogleSignInComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

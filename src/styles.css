@@ -13,5 +13,25 @@ body{
     background-repeat: no-repeat;
     background-size: 80px;
     background-image: url("./assets/img/Ripple.gif");
-
+}
+.frac {
+    display: inline-block !important;
+    position: relative !important ;
+    vertical-align: middle;
+    letter-spacing: 0.001em;
+    text-align: center;
+    padding-right:24px; 
+}
+.frac > span {
+    display: block;
+    padding: 0.1em;
+}
+.frac span.bottom {
+    border-top: thin solid #3C4858;
+}
+.frac span.symbol {
+    display: none;
+} 
+.frac > span{
+    position: unset !important;
 }

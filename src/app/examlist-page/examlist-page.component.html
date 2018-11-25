@@ -3,7 +3,7 @@
     <div class="container">
       <div class="navbar-translate">
         <h4>
-          Exams List </h4>
+          Quizes</h4>
       </div>
     </div>
   </nav>
@@ -18,18 +18,18 @@
           <div class="nav-tabs-wrapper">
             <ul class="nav nav-tabs" data-tabs="tabs">
               <li class="nav-item">
-                <a class="nav-link active" href="#profile" data-toggle="tab">
-                   IBPS
+                <a class="nav-link active" href="#Current_Affairs" data-toggle="tab">
+                   Current Affairs
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#messages" data-toggle="tab">
-                   SBI
+                <a class="nav-link" href="#Math" data-toggle="tab">
+                   Math
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#settings" data-toggle="tab">
-                   Canara
+                <a class="nav-link" href="#Reasoning" data-toggle="tab">
+                   Reasoning
                 </a>
               </li>
             </ul>
@@ -38,7 +38,7 @@
       </div>
       <div class="card-body ">
         <div class="tab-content text-center">
-          <div class="tab-pane active" id="profile">
+          <div class="tab-pane active" id="Current_Affairs">
             <div class="row">
               <div class="listDiv">
                 <div class="row">
@@ -48,30 +48,18 @@
                                           color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
                                       -->
                       <li class="nav-item">
-                        <a class="nav-link active show" href="#IBPS-po-2" role="tab" data-toggle="tab" aria-selected="true">
-                          IBPS PO
-                        </a>
-                      </li>
-                      <li class="nav-item" *ngFor="let set of setarr">
-                        <a class="nav-link" href="#IBPS-{{set.settarget}}" role="tab" data-toggle="tab" aria-selected="false">
-                           {{set.setname}}
+                        <a class="nav-link active show" href="#CA-pill-1" role="tab" data-toggle="tab" aria-selected="true">
+                          Current Affairs Quiz-1
                         </a>
                       </li>
                     </ul>
                   </div>
                   <div class="col-md-8">
                     <div class="tab-content">
-                      <div class="tab-pane active show" id="IBPS-po-2">
-                        Set 5 questions eficiently unleash cross-media information with
-                        <br>
-                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set2)">Start Exam</button>
-                      </div>
-                      
-                      <div class="tab-pane" id="IBPS-{{set.settarget}}" *ngFor="let set of setarr">
-                        Set {{set.settarget}} from {{set.setname}} Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
-                        <br>
-                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                      <div class="tab-pane active show" id="CA-pill-1">
+                        Current Affairs Quiz
+                        <br><b>Time:30 minutes</b>
+                        <br><b>30 Questions</b>
                         <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set1)">Start Exam</button>
                       </div>
                     </div>
@@ -80,9 +68,9 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="messages">
+          <div class="tab-pane" id="Math">
             <div class="row">
-              <div class="">
+              <div class="listDiv">
                 <div class="row">
                   <div class="col-md-3">
                     <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
@@ -90,29 +78,30 @@
                                           color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
                                       -->
                       <li class="nav-item">
-                        <a class="nav-link active show" href="#dashboard-2" role="tab" data-toggle="tab" aria-selected="true">
-                          SBI PO
+                        <a class="nav-link active show" href="#M-pill-1" role="tab" data-toggle="tab" aria-selected="true">
+                          Math Quiz-1
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#schedule-2" role="tab" data-toggle="tab" aria-selected="false">
-                          SBI clerk
+                        <a class="nav-link" href="#M-pill-2" role="tab" data-toggle="tab" aria-selected="false">
+                          Math Quiz-2
                         </a>
                       </li>
                     </ul>
                   </div>
                   <div class="col-md-8">
                     <div class="tab-content">
-                      <div class="tab-pane active show" id="dashboard-2">
-                          Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-                        <br>
-                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                      <div class="tab-pane active show" id="M-pill-1">
+                        Math Quiz 1
+                        <br><b>Time:30 minutes</b>
+                        <br><b>30 Questions</b>
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set2)">Start Exam</button>
                       </div>
-                      <div class="tab-pane" id="schedule-2">
-                        unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
-                        <br>
-                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
-                        <br>
+                      <div class="tab-pane" id="M-pill-2">
+                        Math Quiz 2
+                        <br><b>Time:30 minutes</b>
+                        <br><b>30 Questions</b>
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set3)">Start Exam</button>
                       </div>
                     </div>
                   </div>
@@ -120,9 +109,9 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="settings">
+          <div class="tab-pane" id="Reasoning">
             <div class="row">
-              <div class="">
+              <div class="listDiv">
                 <div class="row">
                   <div class="col-md-3">
                     <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
@@ -130,28 +119,30 @@
                                           color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
                                       -->
                       <li class="nav-item">
-                        <a class="nav-link active show" href="#dashboard-2" role="tab" data-toggle="tab" aria-selected="true">
-                          Dashboard
+                        <a class="nav-link active show" href="#R-pill-1" role="tab" data-toggle="tab" aria-selected="true">
+                          Reasoning quiz-1
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#schedule-2" role="tab" data-toggle="tab" aria-selected="false">
-                           Schedule
+                        <a class="nav-link" href="#R-pill-2" role="tab" data-toggle="tab" aria-selected="false">
+                          Reasoning quiz-2
                         </a>
                       </li>
                     </ul>
                   </div>
                   <div class="col-md-8">
                     <div class="tab-content">
-                      <div class="tab-pane active show" id="dashboard-2">
-                        Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-                        <br>
-                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                      <div class="tab-pane active show" id="R-pill-1">
+                        Reasoning Quiz 1
+                        <br><b>Time:30 minutes</b>
+                        <br><b>30 Questions</b>
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set4)">Start Exam</button>
                       </div>
-                      <div class="tab-pane" id="schedule-2">
-                        Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
-                        <br>
-                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                      <div class="tab-pane" id="R-pill-2">
+                        Reasoning Quiz 2
+                        <br><b>Time:30 minutes</b>
+                        <br><b>30 Questions</b>
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set5)">Start Exam</button>
                       </div>
                     </div>
                   </div>

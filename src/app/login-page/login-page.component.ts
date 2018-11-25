@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import {DataService} from '../data.service';
 import {fadeInAnimation} from '../Fade';
+import {GoogleSignInSuccess} from 'angular-google-signin'; 
+
 export interface loginobj{
   mail:string,
   pwd:string
@@ -26,6 +28,7 @@ export class LoginPageComponent implements OnInit {
     mail:"",
     pwd:""
   }
+  private myClientId: string = '819187862405-vm99bok378vdgr4jrpo3c1k8vefkl1va.apps.googleusercontent.com';
   constructor(private route: Router,private dataservice:DataService) { }
   ngOnInit() {
     localStorage.clear();
@@ -76,6 +79,23 @@ export class LoginPageComponent implements OnInit {
   }
   toggle() {
     this.isOpen = !this.isOpen;
+  }
+  onGoogleSignInSuccess(event: GoogleSignInSuccess) {
+    let googleUser: gapi.auth2.GoogleUser = event.googleUser;
+    let id: string = googleUser.getId();
+    let profile: gapi.auth2.BasicProfile = googleUser.getBasicProfile();
+    console.log('ID: ' +profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    this.dataservice.postlogin(id_token).subscribe(resp => {
+      console.log(resp.status);
+      /*if(resp. =="SUCCESS"){
+        this.route.navigate(['/start']);
+      }
+      */
+    });
+
   }
 
 }
