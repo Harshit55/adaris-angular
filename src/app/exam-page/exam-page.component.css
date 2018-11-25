@@ -1,0 +1,58 @@
+#ExamDiv{
+    width: 80%;
+    height:80%;
+    background-color: #ffffff !important;
+    position: absolute;
+    left: 10%;
+}
+#submit,#next{
+    float:right;
+}
+#answer_section{
+    height: 50%;
+    margin: 20px;
+    margin-left: 30px;
+}
+#answer_section table{
+    height:100%;
+}
+#answer_section .form-check{
+    padding: 2% 0%;
+}
+#next[disabled],#prev[disabled]{
+    cursor: auto;
+}
+#button_section{
+    width: 100%;
+}
+#questionDiv i{
+    color:#9124a3;
+    position: relative;
+    top:6px;
+}
+#Time{
+    text-align: right;
+}
+#TimerDiv{
+    width: 100%;
+}
+#text{
+    margin-left: 2%;
+}
+.navbar.fixed-bottom{
+    margin-bottom: 0px;
+    box-shadow: 0 4px 18px 0 rgba(0,0,0,.12), 0 7px 10px 10px rgba(0,0,0,.15);
+}
+.navbar.fixed-bottom .container,.navbar.fixed-bottom .col{
+    padding-right: 0px;
+}
+#prev i{
+    right:11px;
+}
+#next i{
+    left:11px;
+}
+.btn.btn-primary{
+    padding-right:20px;
+    padding-left:20px;
+}

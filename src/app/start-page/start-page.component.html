@@ -1,0 +1,23 @@
+<div [@fadeInAnimation] *ngIf="isOpen">
+<nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <h4>
+        Instructions </h4>
+    </div>
+  </div>
+</nav>
+<div style="height:5em;"></div>
+<div id="instDiv">
+<h4>
+  Click Next to go to next question
+</h4>
+<h4>
+  Click previous to go to previous question
+</h4>
+<h4>
+  Total time of the exam will be <b>20:00</b> minutes
+</h4>
+<button class="btn btn-primary" id='start' (click)="OnStartClick()">Start Exam</button>
+</div>
+</div>

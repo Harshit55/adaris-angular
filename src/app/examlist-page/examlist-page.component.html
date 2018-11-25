@@ -1,0 +1,168 @@
+<div [@fadeInAnimation] *ngIf="isOpen">
+<nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
+    <div class="container">
+      <div class="navbar-translate">
+        <h4>
+          Exams List </h4>
+      </div>
+    </div>
+  </nav>
+  <div style="height:5em;"></div>
+<div id="ExamList">
+  <div class="col-md-12">
+    <!-- Tabs with icons on Card -->
+    <div class="card card-nav-tabs">
+      <div class="card-header card-header-primary">
+        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+        <div class="nav-tabs-navigation">
+          <div class="nav-tabs-wrapper">
+            <ul class="nav nav-tabs" data-tabs="tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#profile" data-toggle="tab">
+                   IBPS
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#messages" data-toggle="tab">
+                   SBI
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#settings" data-toggle="tab">
+                   Canara
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-body ">
+        <div class="tab-content text-center">
+          <div class="tab-pane active" id="profile">
+            <div class="row">
+              <div class="listDiv">
+                <div class="row">
+                  <div class="col-md-3">
+                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
+                      <!--
+                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+                                      -->
+                      <li class="nav-item">
+                        <a class="nav-link active show" href="#IBPS-po-2" role="tab" data-toggle="tab" aria-selected="true">
+                          IBPS PO
+                        </a>
+                      </li>
+                      <li class="nav-item" *ngFor="let set of setarr">
+                        <a class="nav-link" href="#IBPS-{{set.settarget}}" role="tab" data-toggle="tab" aria-selected="false">
+                           {{set.setname}}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tab-content">
+                      <div class="tab-pane active show" id="IBPS-po-2">
+                        Set 5 questions eficiently unleash cross-media information with
+                        <br>
+                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set2)">Start Exam</button>
+                      </div>
+                      
+                      <div class="tab-pane" id="IBPS-{{set.settarget}}" *ngFor="let set of setarr">
+                        Set {{set.settarget}} from {{set.setname}} Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
+                        <br>
+                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set1)">Start Exam</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="messages">
+            <div class="row">
+              <div class="">
+                <div class="row">
+                  <div class="col-md-3">
+                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
+                      <!--
+                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+                                      -->
+                      <li class="nav-item">
+                        <a class="nav-link active show" href="#dashboard-2" role="tab" data-toggle="tab" aria-selected="true">
+                          SBI PO
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#schedule-2" role="tab" data-toggle="tab" aria-selected="false">
+                          SBI clerk
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tab-content">
+                      <div class="tab-pane active show" id="dashboard-2">
+                          Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+                        <br>
+                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                      </div>
+                      <div class="tab-pane" id="schedule-2">
+                        unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
+                        <br>
+                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="settings">
+            <div class="row">
+              <div class="">
+                <div class="row">
+                  <div class="col-md-3">
+                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
+                      <!--
+                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+                                      -->
+                      <li class="nav-item">
+                        <a class="nav-link active show" href="#dashboard-2" role="tab" data-toggle="tab" aria-selected="true">
+                          Dashboard
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#schedule-2" role="tab" data-toggle="tab" aria-selected="false">
+                           Schedule
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tab-content">
+                      <div class="tab-pane active show" id="dashboard-2">
+                        Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+                        <br>
+                        <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                      </div>
+                      <div class="tab-pane" id="schedule-2">
+                        Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
+                        <br>
+                        <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Tabs with icons on Card -->
+  </div>
+</div>
+</div>

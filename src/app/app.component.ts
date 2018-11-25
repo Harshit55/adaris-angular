@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'adaris-angular';
+  quiz = 'Quiz-SBI';
+  hour=0;
+  min=20;
+  sec=0;
+  public timer="go";
+
+  constructor(){
+  }
+
 }

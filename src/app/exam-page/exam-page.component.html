@@ -1,0 +1,50 @@
+<div [@fadeInAnimation] *ngIf="!isOpen" id="loadinggif"></div>
+<div id="exam-pageDiv" [@fadeInAnimation] *ngIf="isOpen">
+<nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
+    <div class="container">
+      <div id="TimerDiv" class="row" width="10">
+        <h4 class="col-6">Adaris Exam</h4>
+        <h4 id="Time"class="col-6">Time Left {{showtime()}}</h4>
+      </div>
+    </div>
+  </nav>
+  <div style="height:5em;"></div>
+<div id="ExamDiv">
+        <div id="question_section" class="row">
+            <div class="col-6">
+                <h4 id='text'>Question: {{quenumber+1}} / {{total}}</h4>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary" id='submit' (click)="OnSubmitClick()">Submit Exam</button>
+            </div>
+        </div>
+        <h4 id="questionDiv"><i class="material-icons">label_important</i>
+             {{showquestion()}}
+        </h4>
+        <div id="answer_section" class="form-check form-check-radio">
+            <div *ngFor="let option of options">
+                <div class="form-check form-check-radio row" [@fadeInAnimation]>
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="option" id="radio_{{option.oID}}" (click)="OnOptionClick(option.oID)">
+                        {{option.option}}
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div style="height:5em;"></div>
+        </div>
+<nav class="navbar fixed-bottom navbar-expand-lg" id="sectionsNav">
+    <div class="container">
+          <div id="button_section" class="row">
+              <div class="col">
+                <button class="btn btn-primary" id='prev' (click)="OnPrevClick()"><i class="material-icons">arrow_back</i>Previous</button>
+                <button class="btn btn-primary" id='clear' (click)="OnClearClick()">Clear</button>
+                <button class="btn btn-primary" id='next' (click)="OnNextClick()">Next<i class="material-icons">arrow_forward</i></button>
+              </div>
+        </div>
+    </div>
+  </nav>
+</div>
+</div>

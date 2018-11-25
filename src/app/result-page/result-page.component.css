@@ -1,0 +1,23 @@
+#resultDiv{
+    position:absolute;
+    left:10%;
+    width: 80%;
+    top:28%;
+    text-align: center;
+}
+#checkmark{
+    font-size: 4em;
+}
+.prv{
+    text-align: center;
+}
+.nxt{
+    text-align: left;
+}
+.prev i{
+    right:11px;
+    padding-right:0px;
+}
+.next i{
+    left:11px;
+}
