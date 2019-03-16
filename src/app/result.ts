@@ -1,10 +1,12 @@
 export interface Mainresult{
     qpID:string,
-    answers:Array<Answerset>;
+    sections:Array<Sectionset>;
   }
 
-export interface Answerset{
-    qID:number;
-    oID:number;
+export interface Sectionset{
+    answers:Array<Answerset>
 }
-  
+export interface Answerset{
+    qID:number,
+    oID:number;
+} 

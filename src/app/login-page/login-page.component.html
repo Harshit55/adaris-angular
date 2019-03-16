@@ -13,12 +13,8 @@
                 <a href="#pablo" class="btn btn-link btn-just-icon">
                   <i class="fa fa-twitter"></i>
                 </a>
-                <div class="btn btn-just-icon">
+                <div class="btn btn-link btn-just-icon" (click)="signInWithGoogle()">
                   <i class="fa fa-google-plus"></i>
-                  <google-signin
-                    [clientId]="myClientId"
-                    (googleSignInSuccess)="onGoogleSignInSuccess($event)">
-                  </google-signin>
                 </div>
               </div>
             </div>

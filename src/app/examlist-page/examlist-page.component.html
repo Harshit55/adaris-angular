@@ -1,159 +1,121 @@
 <div [@fadeInAnimation] *ngIf="isOpen">
-<nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
-    <div class="container">
-      <div class="navbar-translate">
-        <h4>
-          Quizes</h4>
-      </div>
-    </div>
-  </nav>
-  <div style="height:5em;"></div>
-<div id="ExamList">
-  <div class="col-md-12">
-    <!-- Tabs with icons on Card -->
-    <div class="card card-nav-tabs">
-      <div class="card-header card-header-primary">
-        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
-        <div class="nav-tabs-navigation">
-          <div class="nav-tabs-wrapper">
-            <ul class="nav nav-tabs" data-tabs="tabs">
-              <li class="nav-item">
-                <a class="nav-link active" href="#Current_Affairs" data-toggle="tab">
-                   Current Affairs
-                </a>
+  <nav class="navbar navbar-expand-lg bg-primary">
+    <div class="nav-tabs-navigation">
+      <div class="nav-tabs-wrapper">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h3 style="margin-top:10px">Adaris Exams</h3>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav nav nav-tabs" data-tabs="tabs">
+              <li class="nav-item" *ngFor="let examlst of examslist;let exm_idx = index;" style="color:#000;">
+                <a class="nav-link" [ngClass]="{'active':exm_idx==0}" data-toggle="tab" href="#{{examlst.category_name}}">{{examlst.category_name}}</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#Math" data-toggle="tab">
-                   Math
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#Reasoning" data-toggle="tab">
-                   Reasoning
-                </a>
+              <li class="nav-item" [class.social]="!isMobile">
+                <div class="nav-link" [style.padding-top]="!isMobile&&!loginstate?'38px':''">
+                  <button class="btn btn-primary" [class.gbtnclr]="!isMobile" id="gbtn" (click)="onSigninClick()" *ngIf="!loginstate">G+
+                    SignIn</button>
+                  <div *ngIf="loginstate" style="cursor:pointer;">
+                    <app-googlelogin></app-googlelogin>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="card-body ">
-        <div class="tab-content text-center">
-          <div class="tab-pane active" id="Current_Affairs">
-            <div class="row">
-              <div class="listDiv">
-                <div class="row">
-                  <div class="col-md-3">
-                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
-                      <!--
-                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
-                                      -->
-                      <li class="nav-item">
-                        <a class="nav-link active show" href="#CA-pill-1" role="tab" data-toggle="tab" aria-selected="true">
-                          Current Affairs Quiz-1
+    </div>
+  </nav>
+  <div style="height:5em;"></div>
+  <div class="modal fade" id="{{getmodalid()}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="font-size: 16px;text-align: left;">
+        Please Signin with Google account to continue
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" data-dismiss="modal" class="btn btn-primary" (click)="onSigninClick()">Signin</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="card-body ">
+    <div class="tab-content text-center">
+      <div class="tab-pane" *ngFor="let examlst of examslist;let exm_idx = index;" id="{{examlst.category_name}}"
+        [ngClass]="{'active':exm_idx==0}">
+        <div id="ExamList">
+          <div class="col-md-12">
+            <!-- Tabs with icons on Card -->
+            <div class="card card-nav-tabs">
+              <div class="card-header card-header-primary">
+                <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                <div class="nav-tabs-navigation">
+                  <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                      <li class="nav-item" *ngFor="let groups of examlst.groups;let grp_idx = index;">
+                        <a class="nav-link" href="#{{groups.group_name}}" [ngClass]="{'active':grp_idx==0}" data-toggle="tab">
+                          {{groups.group_name}}
                         </a>
                       </li>
                     </ul>
                   </div>
-                  <div class="col-md-8">
-                    <div class="tab-content">
-                      <div class="tab-pane active show" id="CA-pill-1">
-                        Current Affairs Quiz
-                        <br><b>Time:30 minutes</b>
-                        <br><b>30 Questions</b>
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set1)">Start Exam</button>
+                </div>
+              </div>
+              <div class="card-body ">
+                <div class="tab-content text-center">
+                  <div class="tab-pane" *ngFor="let group of examlst.groups;let grp_idx = index;" id="{{group.group_name}}"
+                    [ngClass]="{'active':grp_idx==0}">
+                    <div class="row">
+                      <div class="listDiv">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
+                              <!--
+                                            color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+                                        -->
+                              <li class="nav-item">
+                                <a class="nav-link" *ngFor="let exam of group.group_exams;let exam_idx = index;" href="#{{group.group_name}}_{{exam_idx}}"
+                                  [ngClass]="{'active':exam_idx==0}" role="tab" data-toggle="tab" aria-selected="true">
+                                  {{exam.name}}
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-md-8">
+                            <div class="tab-content">
+                              <div class="tab-pane" *ngFor="let exam of group.group_exams;let exam_idx = index;" id="{{group.group_name}}_{{exam_idx}}"
+                                [ngClass]="{'active':exam_idx==0}">
+                                {{exam.name}}
+                                <br><b>Time:{{exam.time}} minutes</b>
+                                <br><b>{{exam.tot_que}} Questions</b>
+                                <br><button class="btn btn-primary" (click)="onStartClick(exam.qp_id,exam.time,exam.tot_que)"
+                                  data-toggle="modal" data-target="#exampleModal">Start Exam</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="Math">
-            <div class="row">
-              <div class="listDiv">
-                <div class="row">
-                  <div class="col-md-3">
-                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
-                      <!--
-                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
-                                      -->
-                      <li class="nav-item">
-                        <a class="nav-link active show" href="#M-pill-1" role="tab" data-toggle="tab" aria-selected="true">
-                          Math Quiz-1
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#M-pill-2" role="tab" data-toggle="tab" aria-selected="false">
-                          Math Quiz-2
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-md-8">
-                    <div class="tab-content">
-                      <div class="tab-pane active show" id="M-pill-1">
-                        Math Quiz 1
-                        <br><b>Time:30 minutes</b>
-                        <br><b>30 Questions</b>
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set2)">Start Exam</button>
-                      </div>
-                      <div class="tab-pane" id="M-pill-2">
-                        Math Quiz 2
-                        <br><b>Time:30 minutes</b>
-                        <br><b>30 Questions</b>
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set3)">Start Exam</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="Reasoning">
-            <div class="row">
-              <div class="listDiv">
-                <div class="row">
-                  <div class="col-md-3">
-                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
-                      <!--
-                                          color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
-                                      -->
-                      <li class="nav-item">
-                        <a class="nav-link active show" href="#R-pill-1" role="tab" data-toggle="tab" aria-selected="true">
-                          Reasoning quiz-1
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#R-pill-2" role="tab" data-toggle="tab" aria-selected="false">
-                          Reasoning quiz-2
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-md-8">
-                    <div class="tab-content">
-                      <div class="tab-pane active show" id="R-pill-1">
-                        Reasoning Quiz 1
-                        <br><b>Time:30 minutes</b>
-                        <br><b>30 Questions</b>
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set4)">Start Exam</button>
-                      </div>
-                      <div class="tab-pane" id="R-pill-2">
-                        Reasoning Quiz 2
-                        <br><b>Time:30 minutes</b>
-                        <br><b>30 Questions</b>
-                        <br><button  class="btn btn-primary" (click)="onStartClick(qpidset.set5)">Start Exam</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- End Tabs with icons on Card -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- End Tabs with icons on Card -->
   </div>
-</div>
-</div>

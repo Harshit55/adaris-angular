@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {fadeInAnimation} from '../Fade';
 import { Router } from '@angular/router';
+import {DataTransferService} from '../data-transfer.service';
+import {SocialaccountService} from '../socialaccount.service';
 
 @Component({
   selector: 'app-result-page',
@@ -12,20 +14,21 @@ export class ResultPageComponent implements OnInit ,OnDestroy{
 
   result="";
   total="";
+  rank="";
   result_icon="";
   icon_color="";
   isOpen=true;
   score_status=""
-  constructor(private router:Router) { }
+  constructor(private router:Router,private datatransferservice:DataTransferService,private socialService:SocialaccountService) { }
 
   ngOnInit() {
-    this.result=localStorage.getItem("result");
-    this.total=localStorage.getItem("total");
+    this.result=this.datatransferservice.getScore();
+    this.total=this.datatransferservice.getTotal();
+    this.rank=this.datatransferservice.getRank();
+    if(this.result.length<=0 || !this.socialService.loggedIn) this.router.navigate(['/examlist']);
     if(this.result==null || this.total==null){
       this.router.navigate(['/error']);
     }else{
-    //this.result="2";
-    //this.total="6";
     if(( parseInt(this.total))/2>(parseInt(this.result))){
       this.icon_color="#e5e500";
       this.result_icon="error";

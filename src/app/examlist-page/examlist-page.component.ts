@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import { fadeInAnimation } from '../Fade';
-import {Examslist,Exams, Exam} from '../examslist'
-import {DataService} from '../data.service'
+import {Questioncategory, Questionsubcategory,Questioninfo} from '../questionlist'
+import {DataService} from '../data.service';
+import {DataTransferService} from '../data-transfer.service';
+import {SocialaccountService} from '../socialaccount.service';
+import { ApplicationStateServiceService} from '../application-state-service.service'
 
 interface set{
   setname:string,
@@ -15,71 +18,54 @@ interface set{
   animations:[fadeInAnimation]
 })
 export class ExamlistPageComponent implements OnInit {
-  qpidset={
-    set1:"5",
-    set2:"7",
-    set3:"8",
-    set4:"9",
-    set5:"10"
-  }
-  set1:set;
-  set2:set;
-  set3:set;
-  set4:set;
-  set5:set;
-  setarr:Array<set>=[]
-  isOpen=true;
-  examslist:Examslist;
-  exams:Array<Exams>=[];
-  exam:Array<Exam>=[];
-  constructor(private router:Router,private dataservice: DataService) { }
+  isOpen=false;
+  examslist:Array<Questioncategory>=[];
+  exams:Array<Questionsubcategory>=[];
+  exam:Array<Questioninfo>=[];
+  loginstate:boolean=false;
+  isMobile:boolean=false;
+  modalid="";
+
+  constructor(private router:Router,private dataservice: DataService,private datatransferservice:DataTransferService,private socialservice:SocialaccountService,private screenstatus:ApplicationStateServiceService) { }
 
   ngOnInit() {
-    this.generateset();
-    //this.getexamslist();
+    this.getexamslist();
+    this.isMobile=this.screenstatus.getIsMobileResolution();
   }
   getexamslist(){
     this.dataservice.getexamslist().subscribe(data=>{
-      this.examslist=data['examslist'];
-      this.exams=this.examslist.exams;
+      this.examslist=data['categories'];
+      console.log("examslist"+this.examslist);
+      this.exams=this.examslist[0].groups;
+      this.exam=this.exams[0].group_exams;
+      this.socialservice.loggedIn.subscribe(loggedin=>{
+        this.loginstate=loggedin;
+      });
+      this.toggle();
     });
   }
-  onStartClick(qpid){
-    localStorage.setItem("qpid",qpid);
+  onStartClick(qpid:string,time:string,tot_que:string){
+    this.datatransferservice.setqpID(qpid);
+    this.datatransferservice.setTime(time);
+    this.datatransferservice.setTotal(tot_que);
+    if(this.loginstate){
     this.toggle();
     setTimeout(resp =>{
-        this.router.navigate(['/login']);
+        this.router.navigate(['/start']);
       },300);
+    }
   }
-  generateset(){
-    this.set1={
-      setname:"quiz-1",
-      settarget:1
-    }
-    this.set2={
-      setname:"quiz-2",
-      settarget:2
-    }
-    this.set3={
-      setname:"quiz-3",
-      settarget:3
-    }
-    this.set4={
-      setname:"quiz-4",
-      settarget:4
-    }
-    this.set5={
-      setname:"quiz-5",
-      settarget:5
-    }
-    this.setarr.push(this.set1);
-    this.setarr.push(this.set2);
-    this.setarr.push(this.set3);
-    this.setarr.push(this.set4);
-    this.setarr.push(this.set5);
+  getmodalid(){
+    if(!this.loginstate) return "exampleModal";
+    else return "";
   }
   toggle(){
     this.isOpen=!this.isOpen;
   }
-
+  onSigninClick(){
+    this.socialservice.signInWithGoogle();
+  }
+  onLogOutClick(){
+    this.socialservice.signOutOfGoogle();
+  }
 }

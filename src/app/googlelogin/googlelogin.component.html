@@ -1,0 +1,10 @@
+
+    <a class="nav-link"[ngClass]="{'pos_social':isMobile,'dropdown-toggle':enablelogout,'social':!enablelogout}" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="row" [style.min-width]="isMobile?'150px':''">
+            <div class="col-3"><div id="gImage" [style.background-image]="getGoogle(0)" ></div></div>
+            <div class="col-6" [innerHTML]="getGoogle(1)" id="gName" [style.color]="isMobile?'#3C4858':''" ></div>
+        </div>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" *ngIf="enablelogout">
+      <a class="dropdown-item" (click)="googleSignOut()">LogOut</a>
+    </div>

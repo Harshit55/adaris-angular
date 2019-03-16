@@ -1,50 +1,123 @@
-<div [@fadeInAnimation] *ngIf="!isOpen" id="loadinggif"></div>
-<div id="exam-pageDiv" [@fadeInAnimation] *ngIf="isOpen">
-<nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
-    <div class="container">
-      <div id="TimerDiv" class="row" width="10">
-        <h4 class="col-6">Adaris Exam</h4>
-        <h4 id="Time"class="col-6">Time Left {{showtime()}}</h4>
-      </div>
-    </div>
-  </nav>
-  <div style="height:5em;"></div>
-<div id="ExamDiv">
-        <div id="question_section" class="row">
-            <div class="col-6">
-                <h4 id='text'>Question: {{quenumber+1}} / {{total}}</h4>
-            </div>
-            <div class="col-6">
-                <button class="btn btn-primary" id='submit' (click)="OnSubmitClick()">Submit Exam</button>
-            </div>
-        </div>
-        <div id="questionDiv"><i class="material-icons">label_important</i>
-             <h4 [innerHTML]="showquestion()"></h4>
-        </div>
-        <div id="answer_section" class="form-check form-check-radio">
-            <div *ngFor="let option of options">
-                <div class="form-check form-check-radio row" [@fadeInAnimation]>
-                    <label class="form-check-label row">
-                        <input class="form-check-input" type="radio" name="option" id="radio_{{option.oID}}" (click)="OnOptionClick(option.oID)">
-                        <span class="circle">
-                            <span class="check"></span>
-                        </span>
-                        <p [innerHTML]="option.option" class="col-md-auto"></p>
-                    </label>
+<ng-sidebar-container style="height:100vh">
+
+    <!-- A sidebar -->
+    <ng-sidebar [(opened)]="_opened" position="right" mode="slide">
+        <div class="slideBarDiv">
+            <app-googlelogin></app-googlelogin>
+            <div *ngFor="let section of sections; let sec_idx = index;" id="Slidebar_Sections">
+                <div class="section_name">{{section.section_name}}</div>
+                <div class="Seperator"></div>
+                <div class="row justify-content-md-left Slidebar_Buttonset">
+                    <div class="col-1 Slidebar_Buttons" *ngFor="let question of section.questions;let que_idx = index;">
+                        <button (click)="getquestion(que_idx,sec_idx)" class="btn slidebtn" [ngClass]="{
+                        'active': selectedqID==question.qID,
+                        'visited': sets[sec_idx].answers[que_idx].oID==-1,
+                        'answered': sets[sec_idx].answers[que_idx].oID!=-2 && sets[sec_idx].answers[que_idx].oID!=-1
+                      }">{{que_idx+1}}</button></div>
                 </div>
             </div>
-            <div style="height:5em;"></div>
         </div>
-<nav class="navbar fixed-bottom navbar-expand-lg" id="sectionsNav">
-    <div class="container">
-          <div id="button_section" class="row">
-              <div class="col">
-                <button class="btn btn-primary" id='prev' (click)="OnPrevClick()"><i class="material-icons">arrow_back</i>Previous</button>
-                <button class="btn btn-primary" id='clear' (click)="OnClearClick()">Clear</button>
-                <button class="btn btn-primary" id='next' (click)="OnNextClick()">Next<i class="material-icons">arrow_forward</i></button>
-              </div>
+    </ng-sidebar>
+
+    <!-- Page content -->
+    <div ng-sidebar-content>
+        <div [@fadeInAnimation] *ngIf="!isOpen" id="loadinggif"></div>
+        <div id="exam-pageDiv" [@fadeInAnimation] *ngIf="isOpen">
+            <nav class="navbar fixed-top navbar-expand-lg" id="sectionsNav">
+                <div class="container">
+                    <div id="TimerDiv" class="row" width="10">
+                        <h4 class="col-6">Adaris Exam</h4>
+                        <h4 id="Time" class="col-6">Time Left {{showtime()}}</h4>
+                    </div>
+                </div>
+            </nav>
+            <div style="height:5em;"></div>
+            <button (click)="_toggleSidebar()" id='slidebarmenu' class="btn btn-primary"><i
+                    class="material-icons">{{_opened?'keyboard_arrow_right':'keyboard_arrow_left'}}</i></button>
+            <mat-tab-group animationDuration="0ms" [selectedIndex]="secnumber"
+                (selectedTabChange)="onTabChange($event)">
+                <mat-tab *ngFor="let section of sections" label="{{section.section_name}}">
+                    <div id="question_section" class="row">
+                        <div class="col-10">
+                            <p id='text'>Question: {{quenumber+1}} / {{total}}</p>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary" id='submit' (click)="OnSubmitClick()" data-toggle="modal"
+                                data-target="#exampleModal">Submit Exam</button>
+                        </div>
+                    </div>
+                    <div id="ExamDiv">
+                        <div [class.row]="!isMobile" id="ExamMasterTable">
+                            <div class="col" *ngIf="!hasMaster" [ngClass]="{
+                                'sectionSeperatorBTM':isMobile,
+                                'sectionSeperatorRT':!isMobile
+                            }" id="ExamMasterTD">
+                                <p *ngIf="!hasMaster" class="bold">Comprehension:</p>
+                                <p [innerHTML]="showquestionmaster()"></p>
+                            </div>
+                            <div class="col">
+                                <p *ngIf="!hasMaster" class="bold">Question:</p>
+                                <div id="questionDiv">
+                                    <p [innerHTML]="showquestion()"></p>
+                                </div>
+                                <div id="answer_section" class="form-check form-check-radio">
+                                    <div *ngFor="let option of options">
+                                        <div class="form-check form-check-radio row" [@fadeInAnimation]
+                                            [class.activeAns]="option.oID==sets[secnumber].answers[quenumber].oID">
+                                            <label class="form-check-label row">
+                                                <input class="form-check-input" type="radio" name="option"
+                                                    id="radio_{{option.oID}}" (click)="OnOptionClick(option.oID)">
+                                                <span class="circle">
+                                                    <span class="check"></span>
+                                                </span>
+                                                <p [innerHTML]="option.option"
+                                                    [class.answer]="option.oID==sets[secnumber].answers[quenumber].oID"
+                                                    class="col-md-auto"></p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div style="height:5em;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <nav class="navbar fixed-bottom navbar-expand-lg" id="sectionsNav">
+                            <div class="container">
+                                <div id="button_section" class="row">
+                                    <div class="col">
+                                        <button class="btn btn-primary" id='prev' (click)="OnQuestionChange(1)"><i
+                                                class="material-icons">arrow_back</i>Previous</button>
+                                        <button class="btn btn-primary" id='clear'
+                                            (click)="OnClearClick()">Clear</button>
+                                        <button class="btn btn-primary" id='next' (click)="OnQuestionChange(0)">Next<i
+                                                class="material-icons">arrow_forward</i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </div>
-  </nav>
-</div>
+
+</ng-sidebar-container>
+<div class="modal fade" id="{{getModalId()}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You did not answer all the questions.Do you want to submit?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary" (click)="submitresults()">Ok</button>
+            </div>
+        </div>
+    </div>
 </div>

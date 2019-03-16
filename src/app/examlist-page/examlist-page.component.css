@@ -15,3 +15,33 @@
 .nav-pills .nav-item .nav-link.active{
     background-color: #9c27b0;
 }
+#sectionsNav{z-index: 1000;}
+@media (max-width: 991px) {
+.navbar-collapse .navbar-nav .nav-item .nav-link{
+    color:#3C4858 !important;
+}
+.navbar-collapse .navbar-nav .nav-item .nav-link.active{
+    background: #f4f4f4;
+}
+.tab-content>.tab-pane{
+    padding-top:10px;
+}
+}
+button.navbar-toggler{
+    position: absolute;
+    padding: 15px;
+    right: 0;
+}
+.social{
+    position:absolute;
+    right:20px;
+    top:0px
+}
+.navbar.bg-primary .dropdown-item:focus, .navbar.bg-primary .dropdown-item:hover{
+    background: #f4f4f4;
+    color:#000000;
+}
+.gbtnclr:hover{
+    color:#3C4858;
+    background-color:#f4f4f4; 
+}

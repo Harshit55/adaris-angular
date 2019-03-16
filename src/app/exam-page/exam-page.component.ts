@@ -1,31 +1,41 @@
-import { Component, OnInit, OnChanges, AfterViewChecked, OnDestroy} from '@angular/core';
+import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { DataService } from '../data.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import { Questions, Maindata, Options } from '../question';
-import { Answerset, Mainresult } from '../result';
+import { DataTransferService } from '../data-transfer.service';
+import { ApplicationStateServiceService } from '../application-state-service.service';
+import { Questions, Maindata, Options, Sections } from '../question';
+import { Answerset, Mainresult, Sectionset } from '../result';
 import { Router } from '@angular/router';
 import { fadeInAnimation } from '../Fade';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { SocialaccountService } from '../socialaccount.service';
+
 @Component({
   selector: 'app-exam-page',
   templateUrl: './exam-page.component.html',
   styleUrls: ['./exam-page.component.css'],
   animations: [fadeInAnimation]
 })
-
-export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
+export class ExamPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   quenumber = 0;
+  secnumber = 0;
   checked = true;
   mainresult: Mainresult = {
     qpID: "",
-    answers: []
+    sections: []
   };
   saveoID: number;
   options: Array<Options> = [];
   option: string = "";
   maindata: Maindata = {
-    questions: []
+    sections: [],
+    parentQuestions: []
   };
   questions: Array<Questions> = [];
+  sections: Array<Sections> = [];
+  parents: object = {};
+  sectionset: Sectionset = { answers: [] }
+  answerSections: Array<Sectionset> = []
+  answers: Array<Answerset> = []
   answerset: Answerset;
   selectedoID = -1;
   selectedqID = -1;
@@ -36,70 +46,98 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   isOpen = false;
   total = "";
   continue = false;
-  constructor(private dataservice: DataService, private route: Router) { }
+  questionmaster = "";
+  hasMaster = false;
+  _opened: boolean = false;
+  questionslength: number = 0;
+  answernum = 0;
+  sets: Array<Sectionset> = [];
+  dataLoaded: boolean = false;
+  prevsec: object = {};
+  isMobile: boolean = false;
+
+  constructor(private dataservice: DataService, private route: Router, private Screenstatus: ApplicationStateServiceService, private datatransferservice: DataTransferService, private soicalservice: SocialaccountService) { }
   ngOnInit() {
-    this.getreqdata();
-    this.showquestion();
-    this.timerdisplay = "30:00";
-    this.settimer();
-  }
-  ngOnChanges() {
+    if (this.datatransferservice.getqpID().length <= 0 || !this.soicalservice.loggedIn) this.route.navigate(['/examlist']);
+    else {
+      this.soicalservice.setComponent("exam_page");
+      this.getreqdata();
+      this.timerdisplay = "30:00";
+      this.settimer();
+      this.mainresult.sections = [];
+      this.isMobile = this.Screenstatus.getIsMobileResolution();
+    }
   }
   getreqdata() {
     this.dataservice.getdata()
       .subscribe(data => {
+        this.secnumber = 0;
         this.maindata = data;
-        this.questions = data['questions'];
+        this.sections = data['sections'];
+        this.parents = data['parentQuestions'];
+        this.questions = this.sections[this.secnumber].questions;
+        this.questionslength = this.questions.length;
         this.options = this.questions[this.quenumber].options;
+        this.selectedqID = this.questions[this.quenumber].qID;
         console.log("The data we got is:" + this.options[0].option);
+        this.createSets();
         this.total = this.questions.length.toString();
-        if (this.total.length > 0) this.toggle();
+        if (this.questions.length > 0) {
+          this.dataLoaded = true;
+          this.toggle();
+        }
+        this.showquestion();
+        this.showquestionmaster();
       }, error => {
         this.route.navigate(['/error']);
       });
   }
   saveanswerset() {
+    if (this.selectedqID < 0) { this.selectedqID = this.sections[this.secnumber].questions[this.quenumber].qID; }
     this.answerset = { qID: this.selectedqID, oID: this.selectedoID }
-    this.mainresult.answers[this.quenumber] = (this.answerset);
-    console.log("saved data: qID--> " + this.mainresult.answers[this.quenumber].qID + "oID--> " + this.mainresult.answers[this.quenumber].oID);
+    this.sectionset = this.sets[this.secnumber];
+    this.sectionset.answers[this.quenumber] = this.answerset;
+    /*if (this.mainresult.sections.length>0) {
+      if(this.answerExists(this.mainresult.sections[this.secnumber].answers,this.selectedoID)!=-1){
+      this.answerSections[this.answerExists(this.mainresult.sections[this.secnumber].answers,this.selectedoID)] = this.sectionset;
+      }else {this.answerSections[this.answernum] = this.sectionset;this.answernum++;}
+    }else {this.answerSections[this.answernum] = this.sectionset;this.answernum++;}*/
+    this.mainresult.sections[this.secnumber] = this.sectionset;
+    //console.log("saved data: qID--> " + this.mainresult.sections[this.secnumber].answers[this.quenumber].qID + "oID--> " + this.mainresult.sections[this.secnumber].answers[this.quenumber].oID);
   }
-  OnNextClick() {
-    this.selectedqID = this.questions[this.quenumber].qID;
-    if (this.quenumber < this.questions.length - 1) {
-      this.saveanswerset();
-      this.quenumber++;
-      this.options = this.questions[this.quenumber].options;
-      if (this.mainresult.answers.length >= this.quenumber + 1) {
-        if (this.mainresult.answers[this.quenumber].oID > 0) {
-          this.selectedoID = this.mainresult.answers[this.quenumber].oID;
-          console.log("Prev selected oID--> " + this.mainresult.answers[this.quenumber].oID);
-        }
-        else
-          this.selectedoID = -1;
-      }
-      else
-        this.selectedoID = -1;
-    }
-    else {
-      window.alert("End of Session");
-    }
+  createSets() {
+    let sidx = 0;
+    this.sections.forEach(element => {
+      let set: Sectionset = { answers: [] };
+      let idx = 0;
+      this.prevsec[sidx] = 0;
+      element.questions.forEach(question => {
+        set.answers[idx] = { qID: question.qID, oID: -2 };
+        idx++;
+      });
+      this.sets.push(set);
+      sidx++;
+    });
   }
-  OnPrevClick() {
+  OnQuestionChange(ng: number, sg: number) {
     this.selectedqID = this.questions[this.quenumber].qID;
-    if (this.quenumber > 0) {
-      this.saveanswerset();
-      this.quenumber--;
-      this.options = this.questions[this.quenumber].options;
-      if (this.mainresult.answers[this.quenumber].oID > 0) {
-        this.selectedoID = this.mainresult.answers[this.quenumber].oID;
-        console.log("Prev selected oID--> " + this.mainresult.answers[this.quenumber].oID);
+    this.prevsec[this.secnumber] = this.quenumber;
+    this.saveanswerset();
+    if (ng == 0) { if (this.quenumber < this.questions.length) this.quenumber++; }
+    else if (ng == 1) { if (this.quenumber > 0) this.quenumber--; }
+    else { this.secnumber = sg; this.quenumber = this.prevsec[this.secnumber] }
+    this.refereshData();
+    this.getprevopts();
+  }
+  getprevopts() {
+    if (this.mainresult.sections[this.secnumber] != undefined && this.mainresult.sections[this.secnumber].answers.length >= this.quenumber + 1) {
+      if (this.mainresult.sections[this.secnumber].answers[this.quenumber].oID > 0) {
+        this.selectedoID = this.mainresult.sections[this.secnumber].answers[this.quenumber].oID;
+        console.log("Prev selected oID--> " + this.mainresult.sections[this.secnumber].answers[this.quenumber].oID);
       }
-      else
-        this.selectedoID = -1;
+      else this.selectedoID = -1;
     }
-    else {
-      window.alert("This is the First question.");
-    }
+    else this.selectedoID = -1;
   }
   OnClearClick() {
     this.selectedqID = this.questions[this.quenumber].qID;
@@ -128,9 +166,8 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   showquestion() {
-    if (this.questions.length > 0) {
-      var displayquestion =this.questions[this.quenumber].question;
-      //var displayquestion ="The sum of five consecutive integers is a and sum of next five consecutive integers is b. Then $${b-a\\over 100}$$ is equal to";
+    if (this.questions.length > 0 && this.questions[this.quenumber] != undefined) {
+      var displayquestion = this.questions[this.quenumber].question;
       return displayquestion;
     }
     else {
@@ -158,35 +195,58 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
     console.log(this.selectedoID + "&&" + this.selectedqID);
   }
   OnSubmitClick() {
-    if (this.getanswerstatus(this.mainresult.answers)) {
-      this.continue = window.confirm("You did not answer all the questions.Do you want to continue?");
-      if (this.continue) this.submitresults();
-    }else{
-    this.submitresults();
+    if(this._opened)this._toggleSidebar();
+    if (!(this.mainresult.sections.length == 0 || this.getanswerstatus(this.mainresult.sections))) {
+      this.submitresults();
+    }
   }
-}
+  getModalId(){
+    if(this.mainresult.sections.length == 0 || this.getanswerstatus(this.mainresult.sections)) return "exampleModal";
+    else return "";
+  }
   submitresults() {
     this.toggle();
-    this.mainresult.qpID=localStorage.getItem("qpid");
+    if (this._opened = false) this._toggleSidebar();
+    this.mainresult.qpID = this.datatransferservice.getqpID();
     this.dataservice.postdata(this.mainresult).subscribe(resp => {
-      localStorage.setItem("result", resp.score);
-      localStorage.setItem("total", this.questions.length.toString());
+      this.datatransferservice.setScore(resp.score);
+      this.datatransferservice.setTotal(this.gettotalquestion());
+      this.datatransferservice.setRank(resp.rank);
+      this.soicalservice.setComponent("");
       this.route.navigate(['/results']);
-    },error=>{
+    }, error => {
       this.route.navigate(['/error']);
     });
   }
+  gettotalquestion() {
+    let total = 0;
+    this.sections.forEach(function (questionset) {
+      total += questionset.questions.length;
+    });
+    return total.toString();
+  }
   getanswerstatus(result) {
     var answerstatus = false;
-    if (result.length==this.questions.length) {
-      result.forEach(element => {
-        if (element.oID < 0) {
-          answerstatus = true;
-        }
+    if (result.length == this.sections.length) {
+      result.forEach(answer => {
+        answer.answers.forEach(element => {
+          if (element.oID < 0) {
+            answerstatus = true;
+          }
+        });
       });
       return answerstatus;
     }
     else return true;
+  }
+  answerExists(result, oID) {
+    var index = -1;
+    result.forEach(element => {
+      if (element.oID == oID) {
+        index = result.indexOf(element);
+      }
+    });
+    return index;
   }
   settimer() {
     var time = this.duration, minutes, seconds;
@@ -210,7 +270,57 @@ export class ExamPageComponent implements OnInit, OnChanges, AfterViewChecked, O
   toggle() {
     this.isOpen = !this.isOpen;
   }
+  showquestionmaster() {
+    if (this.questions.length > 0) {
+      var master = this.questions[this.quenumber].pQID;
+      var index = this.getindex(master);
+      if (index != -1) {
+        this.hasMaster = false;
+        return index;
+      }
+      else this.hasMaster = true;
+    }
+  }
+  getindex(master) {
+    var index = -1;
+    var masterque = master + "";
+    if (this.parents[masterque] != undefined) {
+      if (this.parents[masterque].length > 0) index = this.parents[masterque];
+    }
+    return index;
+  }
+  togglemasterquestion() {
+    this.hasMaster = !this.hasMaster;
+  }
+  getquestion(que_idx, sec_idx) {
+    if (this.dataLoaded) {
+      this.saveanswerset();
+      this.quenumber = que_idx;
+      this.secnumber = sec_idx;
+      this.refereshData();
+      this.getprevopts();
+      this._toggleSidebar();
+      console.log("this.secnumber-->" + this.secnumber);
+    }
+  }
+  _toggleSidebar() {
+    this._opened = !this._opened;
+  }
+  OnTabSwitch() {
+    this.secnumber = 1;
+  }
   ngOnDestroy() {
     clearInterval(this.timerprocess);
+  }
+  onTabChange(tabEvent: MatTabChangeEvent) {
+    console.log("tab changed tab index" + tabEvent.index);
+    this.OnQuestionChange(2, tabEvent.index);
+  }
+  refereshData() {
+    this.questions = this.sections[this.secnumber].questions;
+    this.options = this.questions[this.quenumber].options;
+    this.showquestionmaster();
+    this.total = this.questions.length.toString();
+    this.selectedqID = this.questions[this.quenumber].qID;
   }
 }

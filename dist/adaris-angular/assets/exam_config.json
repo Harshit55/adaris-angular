@@ -1,0 +1,81 @@
+{
+  "categories": [
+    {
+      "category_name": "Quizes",
+      "groups": [
+        {
+          "group_name": "Current Affairs",
+          "group_exams": [
+            {
+              "qp_id": "5",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Current Affairs Quiz"
+            }
+          ]
+        },
+        {
+          "group_name": "Math",
+          "group_exams": [
+            {
+              "qp_id": "7",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Math Quiz-1"
+            },
+            {
+              "qp_id": "8",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Math Quiz-2"
+            }
+          ]
+        },
+        {
+          "group_name": "Reasoning",
+          "group_exams": [
+            {
+              "qp_id": "9",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Reasoning quiz-1"
+            },
+            {
+              "qp_id": "10",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Reasoning quiz-2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name": "Test",
+      "groups": [
+        {
+          "group_name": "Test group 1",
+          "group_exams": [
+            {
+              "qp_id": "43",
+              "time": "120",
+              "tot_que": "30",
+              "name": "Test paper with sections"
+            }
+          ]
+        },
+        {
+          "group_name": "Test group 2",
+          "group_exams": [
+            {
+              "qp_id": "7",
+              "time": "30",
+              "tot_que": "30",
+              "name": "Math Quiz-1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

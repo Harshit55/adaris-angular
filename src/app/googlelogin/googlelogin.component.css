@@ -1,0 +1,26 @@
+#gImage{ border-radius: 50%;height:40px;width:40px;background-size: cover; margin:10px;}
+#gName{ padding: 18px 0px 0px 0px;text-align:center;text-transform: capitalize;margin-left:30px;word-break: break-word;}
+
+@media (min-width: 768px){
+    .dropdown-menu{
+        left: 50px !important;
+        top: 90px !important;
+    }
+    .dropdown-toggle:after{
+        position: absolute;
+        right: 0px;
+        top: 40px;
+    }
+}
+@media(max-width: 991px){
+    .dropdown-item{
+        margin-left: .5em !important;
+}
+}
+.pos_social{
+    left:-40px;
+}
+.social{
+    cursor: default;
+    color:#3C4858 !important;
+}

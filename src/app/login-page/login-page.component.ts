@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
-import {DataService} from '../data.service';
-import {fadeInAnimation} from '../Fade';
-import {GoogleSignInSuccess} from 'angular-google-signin'; 
+import { Router } from '@angular/router';
+import { DataService } from '../data.service';
+import {DataTransferService} from '../data-transfer.service';
+import { fadeInAnimation } from '../Fade';
+import { SocialUser } from 'angularx-social-login';
+import { AuthService } from 'angularx-social-login';
+import {SocialaccountService} from '../socialaccount.service';
+import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
 
-export interface loginobj{
-  mail:string,
-  pwd:string
+export interface loginobj {
+  mail: string,
+  pwd: string
 }
 @Component({
   selector: 'app-login-page',
@@ -15,87 +19,95 @@ export interface loginobj{
   animations: [fadeInAnimation]
 })
 export class LoginPageComponent implements OnInit {
-  isOpen=true;
-  Username="";
-  Email="";
-  Password="";
-  signupele="";
-  loginstatus="";
-  loginsuccess={
-    status:""
+  isOpen = true;
+  Username = "";
+  Email = "";
+  Password = "";
+  signupele = "";
+  loginstatus = "";
+  loginsuccess = {
+    status: ""
   };
-  logindata: loginobj={
-    mail:"",
-    pwd:""
+  id_token="";
+  logindata: loginobj = {
+    mail: "",
+    pwd: ""
   }
-  private myClientId: string = '819187862405-vm99bok378vdgr4jrpo3c1k8vefkl1va.apps.googleusercontent.com';
-  constructor(private route: Router,private dataservice:DataService) { }
+  user: SocialUser;
+  private loggedIn: boolean;
+
+  constructor(private authService: AuthService, private route: Router, private dataservice: DataService, private datatransferservice: DataTransferService,private soicalservice:SocialaccountService) { }
   ngOnInit() {
-    localStorage.clear();
-    this.loginstatus="Sign Up";
+    this.loginstatus = "Sign Up";
+    console.log(this.soicalservice.getGoogleName());
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+      this.id_token = user.idToken;
+      this.loggedIn = (user != null);
+      if (this.loggedIn) {
+        console.log("[init]Token-->"+this.id_token);
+        console.log('logged');
+        this.route.navigate(['/start']);
+      }
+    });
+    this.datatransferservice.setGoogleAuth(this.authService);
   }
-  updateusername(userName){
-    this.Username=userName;
+  updateusername(userName) {
+    this.Username = userName;
     return this.Username;
   }
 
-  updateemail(email){
-    this.Email=email;
+  updateemail(email) {
+    this.Email = email;
     return this.Email;
   }
 
-  updatepassword(password){
-    this.Password=password;
+  updatepassword(password) {
+    this.Password = password;
     return this.Password;
   }
-  navigate(){
-      this.route.navigate(['/start']);
+  navigate() {
+    this.route.navigate(['/start']);
   }
-  OnLoginClick(){
-    if(this.loginstatus=="Sign Up"){
-      this.signupele="none";
-      this.loginstatus="Login";
-      localStorage.setItem("loginstate","login");
+  OnLoginClick() {
+    if (this.loginstatus == "Sign Up") {
+      this.signupele = "none";
+      this.loginstatus = "Login";
+      localStorage.setItem("loginstate", "login");
     }
-    else{
-      this.logindata={
-        mail:this.Username,
-        pwd:this.Password
+    else {
+      this.logindata = {
+        mail: this.Username,
+        pwd: this.Password
       }
       this.toggle();
-      this.dataservice.getlogin(this.logindata).subscribe(resp=>{
-        this.loginsuccess=resp;
-        if(this.loginsuccess.status=="SUCCESS"){};
-          this.navigate();
-        })
+      this.dataservice.getlogin(this.logindata).subscribe(resp => {
+        this.loginsuccess = resp;
+        if (this.loginsuccess.status == "SUCCESS") { };
+        this.navigate();
+      });
+      this.navigate();
     }
   }
-  OnSignupClick(){
-    if(this.loginstatus=="Login"){
-      this.signupele="";
-      this.loginstatus="Sign Up";
-      localStorage.setItem("loginstate","signup");
+  OnSignupClick() {
+    if (this.loginstatus == "Login") {
+      this.signupele = "";
+      this.loginstatus = "Sign Up";
+      localStorage.setItem("loginstate", "signup");
     }
   }
   toggle() {
     this.isOpen = !this.isOpen;
   }
-  onGoogleSignInSuccess(event: GoogleSignInSuccess) {
-    let googleUser: gapi.auth2.GoogleUser = event.googleUser;
-    let id: string = googleUser.getId();
-    let profile: gapi.auth2.BasicProfile = googleUser.getBasicProfile();
-    console.log('ID: ' +profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    var id_token = googleUser.getAuthResponse().id_token;
-
-    this.dataservice.postlogin(id_token).subscribe(resp => {
-      console.log(resp.status);
-      /*if(resp. =="SUCCESS"){
-        this.route.navigate(['/start']);
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(
+      (userData) => { //on success
+         //this will return user data from google. What you need is a user token which you will send it to the server
       }
-      */
-    });
+    );
+  };
 
+  signOut(): void {
+    this.authService.signOut();
   }
-
 }

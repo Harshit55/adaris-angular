@@ -10,10 +10,12 @@
 <div id="resultDiv" [@fadeInAnimation] *ngIf="isOpen">
     <div class="col-12"><h3>Your score</h3></div>
     <div class="col-12"><h3>{{result}}/{{total}}</h3></div>
+    <div class="col-12"><h3>Your rank</h3></div>
+    <div class="col-12"><h3>{{rank}}</h3></div>
     <div class="col-12" [style.color]="iconcolor()"><i id="checkmark" class="material-icons">{{result_icon}}</i></div>
     <h2>{{score_status}}</h2>
     <div class="row">
-    <div class="col prv"><button class="btn btn-primary prev" routerLink="/examlist"><i class="material-icons">arrow_back</i>Quizes</button></div>
+    <div class="col prv"><button class="btn btn-primary prev" routerLink="/examlist"><i class="material-icons">arrow_back</i>Home</button></div>
     <!-- <div class="col nxt"><button class="btn btn-primary next">Resultsheet<i class="material-icons">arrow_forward</i></button></div>-->
 </div>
 </div>

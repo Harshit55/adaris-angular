@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpErrorResponse,HttpHeaders,HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs-compat';
 import {throwError} from 'rxjs';
 import { Maindata } from './question';
-import {Mainresult} from './result';
 import { catchError,retry } from 'rxjs/operators';
-import {Examslist} from './examslist';
+import {Questionlist} from './questionlist';
+import {DataTransferService} from './data-transfer.service';
+
 export interface loginstatus{
   status:string
 }
 export interface scorestatus{
-  score:string
+  score:string,
+  rank:string
 }
 @Injectable({
   providedIn: 'root'
@@ -22,16 +23,19 @@ export class DataService {
   postdataurl="";
   getexamslisturl="";
   postloginurl="";
-  constructor(private http:HttpClient) { }
+  postlogouturl="";
+  constructor(private http:HttpClient,private datatransferservice:DataTransferService) { }
 
   initdata(){
-    this.qpid=localStorage.getItem("qpid");
+    this.qpid=this.datatransferservice.getqpID();
     this.getloginurl="https://adaris-exams.herokuapp.com/api/login";
     this.getdataurl="https://adaris-exams.herokuapp.com/api/exams?qpID="+this.qpid+"&action=getQuestionPaper";
     //this.getdataurl="./assets/config.json"
     this.postdataurl="https://adaris-exams.herokuapp.com/api/exams?qpID="+this.qpid+"&action=submitingAnswers";
+    //this.getexamslisturl="./assets/exam_config.json";
     this.getexamslisturl="https://adaris-exams.herokuapp.com/api/exams?action=getExamsList";
-    this.postloginurl="https://adaris-exams.herokuapp.com/glogin";
+    this.postloginurl="https://adaris-exams.herokuapp.com/api/glogin";
+    this.postlogouturl="https://adaris-exams.herokuapp.com/api/glogout";
   }
   getdata(){
     this.initdata();
@@ -42,8 +46,12 @@ export class DataService {
   getlogin(logindata){
   return this.http.post<loginstatus>(this.getloginurl,logindata);
   }
-  postlogin(id_token){
-    return this.http.post<loginstatus>(this.postloginurl,{idtoken: id_token}).pipe(retry(3));
+  postlogin(id_token:string,loginstate:string){
+    this.initdata();
+    let posturl="";
+    if(loginstate=="login") posturl=this.postloginurl+"?idtoken="+id_token;
+    else if(loginstate=="logout") posturl=this.postlogouturl+"?idtoken="+id_token;
+    return this.http.post<loginstatus>(posturl,id_token).pipe(retry(3));
   }
   postdata(data){
     this.initdata();
@@ -51,7 +59,8 @@ export class DataService {
   }
 
   getexamslist(){
-    return this.http.get<Examslist>(this.getdataurl).pipe(retry(3),catchError(this.handleError));
+    this.initdata();
+    return this.http.get<Questionlist>(this.getexamslisturl).pipe(retry(3),catchError(this.handleError))
   }
 
   private handleError(error: HttpErrorResponse) {
